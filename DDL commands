@@ -1,0 +1,197 @@
+/*
+SQLyog Community v13.1.9 (64 bit)
+MySQL - 8.0.28 : Database - movie management system
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`movie management system` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `movie management system`;
+
+/*Table structure for table `actor` */
+
+DROP TABLE IF EXISTS `actor`;
+
+CREATE TABLE `actor` (
+  `art_id` int NOT NULL,
+  `location` varchar(60) DEFAULT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `dir_id` int DEFAULT NULL,
+  PRIMARY KEY (`art_id`),
+  KEY `dir_id` (`dir_id`),
+  CONSTRAINT `actor_ibfk_1` FOREIGN KEY (`dir_id`) REFERENCES `director` (`dir_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `actor` */
+
+insert  into `actor`(`art_id`,`location`,`name`,`dir_id`) values 
+(1,'pune','shubh',1),
+(2,'mumbai','salman',2),
+(3,'chennai','kk',1),
+(4,'delhi','shrey',2),
+(5,'kolkata','shaan',1),
+(6,'chennai','atif',2),
+(7,NULL,NULL,NULL);
+
+/*Table structure for table `admin` */
+
+DROP TABLE IF EXISTS `admin`;
+
+CREATE TABLE `admin` (
+  `admin_id` int NOT NULL AUTO_INCREMENT,
+  `admin_usrname` varchar(60) DEFAULT NULL,
+  `admin_password` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`admin_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `admin` */
+
+insert  into `admin`(`admin_id`,`admin_usrname`,`admin_password`) values 
+(1,'shubham','1234'),
+(2,'shas','1234');
+
+/*Table structure for table `director` */
+
+DROP TABLE IF EXISTS `director`;
+
+CREATE TABLE `director` (
+  `dir_id` int NOT NULL,
+  `dir_name` varchar(60) DEFAULT NULL,
+  `admin_id` int DEFAULT NULL,
+  PRIMARY KEY (`dir_id`),
+  KEY `admin_id` (`admin_id`),
+  CONSTRAINT `director_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `director` */
+
+insert  into `director`(`dir_id`,`dir_name`,`admin_id`) values 
+(1,'rara',1),
+(2,'chibber',2),
+(3,'manan',1),
+(4,'dus',1),
+(5,'sanil',1),
+(6,'bakshi',2),
+(7,'prithivi',2),
+(8,'shenoy',2),
+(9,'tanay',1),
+(10,'sai',1),
+(11,'anand',2),
+(12,'rachit',1),
+(13,'yuvraj',1),
+(14,'arnav',2),
+(15,'akshat',2),
+(16,'saksam',1),
+(17,'dadum',1),
+(18,'sky',2),
+(19,'arush',1),
+(20,'daksh',2);
+
+/*Table structure for table `movie` */
+
+DROP TABLE IF EXISTS `movie`;
+
+CREATE TABLE `movie` (
+  `movie_id` int NOT NULL,
+  `movie_name` varchar(60) DEFAULT NULL,
+  `genre` varchar(60) DEFAULT NULL,
+  `series_id` int DEFAULT NULL,
+  `art_id` int DEFAULT NULL,
+  PRIMARY KEY (`movie_id`),
+  KEY `series_id` (`series_id`),
+  KEY `art_id` (`art_id`),
+  CONSTRAINT `movie_ibfk_1` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`),
+  CONSTRAINT `movie_ibfk_2` FOREIGN KEY (`art_id`) REFERENCES `actor` (`art_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `movie` */
+
+insert  into `movie`(`movie_id`,`movie_name`,`genre`,`series_id`,`art_id`) values 
+(1,'Shawshank','action',1,1),
+(2,'Red Dead Redemption','thriller',2,3),
+(3,'Se7en','adventure',3,2),
+(4,'Top Gun','adventure',4,4),
+(5,NULL,NULL,NULL,NULL);
+
+/*Table structure for table `series` */
+
+DROP TABLE IF EXISTS `series`;
+
+CREATE TABLE `series` (
+  `series_id` int NOT NULL,
+  `series_type` varchar(60) DEFAULT NULL,
+  `art_id` int DEFAULT NULL,
+  PRIMARY KEY (`series_id`),
+  KEY `art_id` (`art_id`),
+  CONSTRAINT `series_ibfk_1` FOREIGN KEY (`art_id`) REFERENCES `actor` (`art_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `series` */
+
+insert  into `series`(`series_id`,`series_type`,`art_id`) values 
+(1,'action',2),
+(2,'thriller',3),
+(3,'adventure',4),
+(4,'fiction',5),
+(5,'mystery',6);
+
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
+
+CREATE TABLE `user` (
+  `user_id` int NOT NULL,
+  `user_name` varchar(60) DEFAULT NULL,
+  `user_email` varchar(60) DEFAULT NULL,
+  `username` varchar(60) DEFAULT NULL,
+  `password` varchar(60) DEFAULT NULL,
+  `genre` varchar(60) DEFAULT NULL,
+  `movie_id` int DEFAULT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `movie_id` (`movie_id`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`movie_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `user` */
+
+insert  into `user`(`user_id`,`user_name`,`user_email`,`username`,`password`,`genre`,`movie_id`) values 
+(1,'shas','shawatsrivastava@gmail.com','shaas17','asdfg','mystery',5),
+(2,'shubh','shubhamgore@gmail.com','shubh123','qwert','thriller',4),
+(3,'abhiram','abhiramnambi@gmail.com','abhir123','Dushya','adventure',3),
+(4,'daksh','dakshbt@gmail.com','daksh123','daksh1234','fiction',2);
+
+/*Table structure for table `watchlist` */
+
+DROP TABLE IF EXISTS `watchlist`;
+
+CREATE TABLE `watchlist` (
+  `watchlist_id` int NOT NULL,
+  `shared_with` varchar(60) DEFAULT NULL,
+  `movie_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  PRIMARY KEY (`watchlist_id`),
+  KEY `movie_id` (`movie_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `watchlist_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`movie_id`),
+  CONSTRAINT `watchlist_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/*Data for the table `watchlist` */
+
+insert  into `watchlist`(`watchlist_id`,`shared_with`,`movie_id`,`user_id`) values 
+(1,'shaas17',5,1),
+(2,'shubh123',4,2),
+(3,'abhir123',3,3);
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

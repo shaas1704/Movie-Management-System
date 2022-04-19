@@ -1,0 +1,7 @@
+SELECT * FROM agent_1 UNION SELECT * FROM agent_2;
+
+SELECT * FROM agent_1 UNION ALL SELECT * FROM agent_2;
+
+SELECT * FROM agent_1 INTERSECT SELECT * FROM agent_2;
+
+SELECT * FROM agent_1 MINUS SELECT * FROM agent_2;
